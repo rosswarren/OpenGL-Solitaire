@@ -162,7 +162,7 @@ void Board::revertSelection(void) {
 	selectedY = lastSelectedY;
 }
 
-void Board::Display(Shader shader) {
+void Board::Display() {
 	glPushMatrix();
 
 	Shapes shapes;

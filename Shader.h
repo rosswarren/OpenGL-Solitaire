@@ -13,7 +13,7 @@ public:
 	void Init(void);
 	void use(void);
 	void disable(void);
-	void updateTimeAndResolution(int width, int height);
+	void updateTimeAndResolution(int width, int height, int fps);
 private:
 	GLuint vertex, fragment, f2, program;
 	GLint loc;
@@ -21,6 +21,6 @@ private:
 	char * textFileRead(char *fn);
 	void printProgramInfoLog(GLuint obj);
 	void printShaderInfoLog(GLuint obj);
-	float time;
+	GLfloat time;
 };
 

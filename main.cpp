@@ -35,7 +35,7 @@ void list_hits(GLint hits, GLuint *names) {
 
 	for (i = 0; i < hits; i++) {
 		// each hit is 4 bytes, name is last
-		int name = names[i * 4 + 3];
+		int name = names[(GLuint)(i * 4 + 3)];
 
 		int selectedY = name / 10;
 		int selectedX = name - selectedY * 10;
@@ -109,7 +109,7 @@ void calcFPS() {
 	frame++; // increment the frame count since the last check
 	time = glutGet(GLUT_ELAPSED_TIME); 
 
-	if (time - timebase > 200) { // check every 1/5th of a second
+	if (time - timebase > 50) { // check every 1/10th of a second
 		fps = (int)(frame * 1000 / (time-timebase)); // set the calculated FPS
 	 	timebase = time;
 		frame = 0;
@@ -127,20 +127,20 @@ void ViewOrtho(int x, int y) {
 }
 
 void ViewPerspective(void) {
-    glMatrixMode( GL_PROJECTION );
+    glMatrixMode(GL_PROJECTION);
     glPopMatrix();
-    glMatrixMode( GL_MODELVIEW );
+    glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
 }
 
 void display() {
-	glClearColor(0.2, 0.2, 0.2, 1);
+	glClearColor(0.2f, 0.2f, 0.2f, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
     ViewOrtho(screenWidth, screenHeight);
 	shader.use();
-	shader.updateTimeAndResolution(screenWidth, screenHeight);
+	shader.updateTimeAndResolution(screenWidth, screenHeight, fps);
     glBegin(GL_QUADS);
     glVertex2f(0, 0);
     glVertex2f(0, screenHeight);
@@ -157,7 +157,7 @@ void display() {
 	glPushMatrix();
 	gluLookAt(60.0f, 60.0f, 60.0f, 0.0f, 0.0f, 0.0f, 0, 0, 1);
 	
-	board.Display(shader);
+	board.Display();
 
 	glDisable(GL_LIGHTING);
 	calcFPS();

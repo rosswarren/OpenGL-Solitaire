@@ -15,13 +15,25 @@ void Shader::disable() {
 	glUseProgram(0);
 }
 
-void Shader::updateTimeAndResolution(int width, int height) {
-	time+= 0.01f;
+void Shader::updateTimeAndResolution(int width, int height, int fps) {
+	// if fps is 20, time should be 0.01
+	// if fps is 200, time should be 0.001
+
+	GLfloat add;
+
+	if (fps < 1) {
+		add = 0;
+	} else {
+		add = 0.5f / (GLfloat)fps;
+	}
+
+	time += add;
+
 	GLint location = glGetUniformLocation(program, "time");
     glUniform1f(location, time);
 
 	location = glGetUniformLocation(program, "resolution");
-    glUniform2f(location, width, height);
+    glUniform2f(location, (GLfloat)width, (GLfloat)height);
 
     DWORD bob = glGetError();
 }
@@ -83,7 +95,7 @@ char * Shader::textFileRead(char *fn) {
 	int count=0;
 
 	if (fn != NULL) {
-		fp = fopen(fn,"rt");
+		fp = fopen(fn, "rt");
 
 		if (fp != NULL) {
 			fseek(fp, 0, SEEK_END);

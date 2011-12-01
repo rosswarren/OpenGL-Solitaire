@@ -12,7 +12,7 @@ public:
 	~Board(void);
 
 	enum Place {FORBIDDEN, EMPTY, PIECE};
-	void Display(Shader shader);
+	void Display();
 	void Init(void);
 	bool movePiece(int fromX, int fromY, int toX, int toY);
 	void setSelected(int x, int y);
