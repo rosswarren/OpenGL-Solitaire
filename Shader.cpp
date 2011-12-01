@@ -16,7 +16,7 @@ void Shader::disable() {
 }
 
 void Shader::updateTimeAndResolution(int width, int height) {
-	time+= 0.001f;
+	time+= 0.01f;
 	GLint location = glGetUniformLocation(program, "time");
     glUniform1f(location, time);
 
@@ -39,10 +39,11 @@ void Shader::Init() {
 	const char * vv = vs;
 	const char * ff = fs;
 
-	glShaderSource(vertex, 1, &vv,NULL);
-	glShaderSource(fragment, 1, &ff,NULL);
+	glShaderSource(vertex, 1, &vv, NULL);
+	glShaderSource(fragment, 1, &ff, NULL);
 
-	free(vs);free(fs);
+	free(vs);
+	free(fs);
 
 	glCompileShader(vertex);
 	glCompileShader(fragment);
@@ -61,19 +62,17 @@ void Shader::Init() {
 }
 
 int Shader::printOglError(char *file, int line) {
-    //
     // Returns 1 if an OpenGL error occurred, 0 otherwise.
-    //
     GLenum glErr;
-    int    retCode = 0;
-
+    int retCode = 0;
     glErr = glGetError();
-    while (glErr != GL_NO_ERROR)
-    {
+
+    while (glErr != GL_NO_ERROR) {
         printf("glError in file %s @ line %d: %s\n", file, line, gluErrorString(glErr));
         retCode = 1;
         glErr = glGetError();
     }
+
     return retCode;
 }
 
@@ -87,16 +86,16 @@ char * Shader::textFileRead(char *fn) {
 		fp = fopen(fn,"rt");
 
 		if (fp != NULL) {
-      
-      fseek(fp, 0, SEEK_END);
-      count = ftell(fp);
-      rewind(fp);
+			fseek(fp, 0, SEEK_END);
+			count = ftell(fp);
+			rewind(fp);
 
 			if (count > 0) {
 				content = (char *)malloc(sizeof(char) * (count+1));
 				count = fread(content,sizeof(char),count,fp);
 				content[count] = '\0';
 			}
+
 			fclose(fp);
 		}
 	}
@@ -111,8 +110,7 @@ void Shader::printProgramInfoLog(GLuint obj)
 
 	glGetProgramiv(obj, GL_INFO_LOG_LENGTH,&infologLength);
 
-    if (infologLength > 0)
-    {
+    if (infologLength > 0) {
         infoLog = (char *)malloc(infologLength);
         glGetProgramInfoLog(obj, infologLength, &charsWritten, infoLog);
 		printf("%s\n",infoLog);
@@ -127,8 +125,7 @@ void Shader::printShaderInfoLog(GLuint obj) {
 
 	glGetShaderiv(obj, GL_INFO_LOG_LENGTH,&infologLength);
 
-    if (infologLength > 0)
-    {
+    if (infologLength > 0) {
         infoLog = (char *)malloc(infologLength);
         glGetShaderInfoLog(obj, infologLength, &charsWritten, infoLog);
 		printf("%s\n",infoLog);

@@ -31,8 +31,8 @@ void keyboard(unsigned char key, int x, int y) {
 
 void list_hits(GLint hits, GLuint *names) {
 	int i;
-
 	printf("%d hits \n", hits);
+
 	for (i = 0; i < hits; i++) {
 		// each hit is 4 bytes, name is last
 		int name = names[i * 4 + 3];
@@ -120,7 +120,7 @@ void ViewOrtho(int x, int y) {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    glOrtho( 0, x , y , 0, -1, 1 );
+    glOrtho(0, x , y , 0, -1, 1);
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
@@ -169,10 +169,9 @@ void display() {
 }
 
 void doSelection(int x, int y) {
-	GLuint buffer[128];
+	GLuint buffer[128] = {0};
 
 	GLint hits, view[4];
-	int id;
 
 	// tell opengl to put the selection data there
 	glSelectBuffer(128, buffer);
@@ -221,7 +220,7 @@ void mouseClick(int button, int state, int x, int y) {
 }
 
 void Init(void) {
-	printf("Loading textures, building display lists and vertex buffer objects \n");
+	printf("Loading textures, building display lists \n");
 
 	GLfloat pos[3] = {1024.0f, 800.0f, 0.0f};
 	GLfloat ambient[3] = {0.1f, 0.1f, 0.1f};

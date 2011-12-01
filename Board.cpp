@@ -177,21 +177,14 @@ void Board::Display(Shader shader) {
 	GLfloat highlightColour [4] = {0.0f, 1.0f, 0.0f, 1.0f};
 
 	glTranslatef(-36.0, -36.0f, 0.0f);
-	for (int y = 0; y < 7; y++) {
+	
+	for (GLuint y = 0; y < 7; y++) {
 		glPushMatrix();
 		glTranslatef(0.0f, 12.0f * y, 0.0f);
 
-		for (int x = 0; x < 7; x++) {
+		for (GLuint x = 0; x < 7; x++) {
 			glPushMatrix();
-
-			try {
-				glLoadName(((y + 1) * 10) + x + 1);
-			} catch (int e) {
-				printf("%i \n", e);
-			}
-
-			//printf("Loading %i \n", (y + 1) * 7 + x);
-			//glLoadName((y + 1) * 7 + x);
+			glLoadName((GLuint)((y + 1) * 10) + x + 1);
 
 			glTranslatef(12.0f * x, 0.0f, 0.0f);
 
@@ -201,6 +194,7 @@ void Board::Display(Shader shader) {
 				if (x == selectedX && y == selectedY) {
 					glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, highlightColour);
 				}
+
 				glutSolidSphere(4.0f, 30, 30);
 				glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, colour);
 			} else if (places[x][y] == EMPTY) {
