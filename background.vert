@@ -1,3 +1,3 @@
 void main() {
-	gl_Position = ftransform();
+	gl_Position = ftransform(); // do standard stuffs
 }

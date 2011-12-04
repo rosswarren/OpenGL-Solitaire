@@ -1,31 +1,46 @@
+#version 120 // min version of shader needed
+
+// Metaball shader for the background
+
 uniform float time;
-uniform vec2 resolution;
+uniform vec2 screenSize;
 
 void main(void) {
-	vec2 [4] move;
-	vec2 p = -1.0 + 2.0 * gl_FragCoord.xy / resolution.xy;
+	// setup the world coordinates vector
+	vec2 world = -1.0 + 2.0 * gl_FragCoord.xy / screenSize.xy;
 
-	move[0].x = cos(time * 0.5);
-	move[0].y = sin(time * 0.2);
+	// array of positions on the sin and cos waves to be calculated into colour and light values
+	vec2 [4] wavePositions;
 
-	move[1].x = cos(time * 0.3);
-	move[1].y = sin(time * 0.4);
-	
-	move[2].x = sin(time * 0.7);
-	move[2].y = cos(time * 0.9);
-	
-	move[3].x = sin(time * 0.8);
-	move[3].y = cos(time * 0.1);
+	// dot products of calculations with the screen to get a value appropriate to the position and screen size
+	float[4] dotProducts;
 
-	float r1 = dot(p - move[0], p - move[0]) * 18.0;
-	float r2 = dot(p + move[1], p + move[1]) * 12.0;
-	float r3 = dot(p + move[2], p + move[2]) * 14.0;
-	float r4 = dot(p + move[3], p + move[3]) * 16.0;
-	
-	float metaball = 1.0 / r1 + 0.5 / r2 + 0.5 / r3 + 1.0 / r4;
+	// setup the positions for up/down and left/right movement 
+	wavePositions[0].x = cos(time * 0.5); // first value is used for background colour also
+	wavePositions[0].y = sin(time * 0.2);
+	wavePositions[1].x = cos(time * 0.3);
+	wavePositions[1].y = sin(time * 0.4);
+	wavePositions[2].x = sin(time * 0.7);
+	wavePositions[2].y = cos(time * 0.9);
+	wavePositions[3].x = sin(time * 0.8);
+	wavePositions[3].y = cos(time * 0.1);
 
-	float x = pow(metaball, 1.0 + move[0].x);
-	float y = pow(metaball, 1.0);
+	// setup the values properly mapped to world coordinates
+	dotProducts[0] = dot(world - wavePositions[0], world - wavePositions[0]) * 18.0;
+	dotProducts[1] = dot(world + wavePositions[1], world + wavePositions[1]) * 12.0;
+	dotProducts[2] = dot(world + wavePositions[2], world + wavePositions[2]) * 14.0;
+	dotProducts[3] = dot(world + wavePositions[3], world + wavePositions[3]) * 16.0;
+
+	// the light value at the position
+	float light = 0;
+
+	// calculate the light value 
+	for (int i = 0; i < 4; i++) {
+		light += ((float(i + 6.0)) / 10.0) / dotProducts[i];
+	}
+
+	float x = light;
+	float y = pow(light, 1.0 + wavePositions[0].x / 1.5);
 	float z = y;
 
 	gl_FragColor = vec4(x, y, z, 1.0);

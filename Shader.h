@@ -10,9 +10,11 @@ public:
 	Shader(void);
 	~Shader(void);
 
-	void Init(void);
+	void init(void);
 	void use(void);
 	void disable(void);
+	void normalSpeed(void);
+	void doubleSpeed(void);
 	void updateTimeAndResolution(int width, int height, int fps);
 private:
 	GLuint vertex, fragment, f2, program;
@@ -20,7 +22,7 @@ private:
 	int printOglError(char *file, int line);
 	char * textFileRead(char *fn);
 	void printProgramInfoLog(GLuint obj);
-	void printShaderInfoLog(GLuint obj);
 	GLfloat time;
+	bool increase;
 };
 
